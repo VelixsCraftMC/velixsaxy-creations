@@ -19,7 +19,6 @@
         /* Minecraft Preview Style */
         .preview-box { background: rgba(0, 0, 0, 0.8); border-radius: 4px; padding: 12px; margin-bottom: 15px; border-left: 4px solid var(--success); font-family: 'Consolas', monospace; }
         .mc-cmd { color: #f1f1f1; font-size: 0.95rem; margin-bottom: 5px; }
-        .mc-desc { color: var(--mc-gray); font-size: 0.85rem; }
         .mc-usage { color: #55FF55; font-size: 0.9rem; margin-top: 5px; }
 
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
@@ -47,7 +46,7 @@
 <div class="container">
     <div style="text-align:center">
         <h1>BP Custom Command Generator</h1>
-        <p style="color: #8b949e">By @VelixsCraftMCYT | Anti-Keyboard Close Fix</p>
+        <p style="color: #8b949e">By @VelixsCraftMCYT | Lowercase & Underscore Auto-Formatter</p>
     </div>
 
     <!-- Global Settings -->
@@ -58,8 +57,9 @@
                 <input type="text" id="pack_name" value="Generated Custom Command BP" oninput="liveUpdateAll()">
             </div>
             <div>
-                <label>Global Namespace (prefix:)</label>
-                <input type="text" id="global_ns" value="namespace" oninput="liveUpdateAll()">
+                <label>Global Namespace (lowercase_only)</label>
+                <input type="text" id="global_ns" value="namespace" 
+                       oninput="this.value = this.value.toLowerCase().replace(/\s+/g, '_'); liveUpdateAll()">
             </div>
         </div>
     </div>
@@ -86,8 +86,12 @@
     let activeTab = 'js';
     const paramTypes = ["BlockType", "Boolean", "EntitySelector", "EntityType", "Enum", "Float", "Integer", "ItemType", "Location", "PlayerSelector", "String"];
     
-    // UUID Generation
     const uuids = { h: crypto.randomUUID(), m1: crypto.randomUUID(), m2: crypto.randomUUID() };
+
+    // Fungsi pembantu untuk memformat teks (lowercase & underscore)
+    function formatText(val) {
+        return val.toLowerCase().replace(/\s+/g, '_');
+    }
 
     function addNewCommand() {
         commands.push({
@@ -106,13 +110,12 @@
         cmd.params.push({
             type: "Enum",
             name: "choice",
-            enumId: "ACTION_MAP",
+            enumId: "action_map",
             enumOptions: [{ key: "option_1", mcCommands: ["say Hello World"] }]
         });
         renderUI();
     }
 
-    // Fungsi utama untuk membangun UI (hanya dipanggil saat struktur berubah)
     function renderUI() {
         const container = document.getElementById('commands_ui');
         container.innerHTML = '';
@@ -122,13 +125,14 @@
             div.className = 'card';
             div.id = `cmd-card-${cIdx}`;
             div.innerHTML = `
-                <!-- MINECRAFT PREVIEW SECTION -->
-                <div class="preview-box" id="preview-box-${cIdx}">
-                    <!-- Teks di sini akan diupdate via liveUpdateAll -->
-                </div>
+                <div class="preview-box" id="preview-box-${cIdx}"></div>
 
                 <div class="form-grid">
-                    <div><label>Name</label><input type="text" value="${cmd.name}" oninput="commands[${cIdx}].name=this.value; liveUpdateAll()"></div>
+                    <div>
+                        <label>Name (auto-format)</label>
+                        <input type="text" value="${cmd.name}" 
+                               oninput="this.value = formatText(this.value); commands[${cIdx}].name=this.value; liveUpdateAll()">
+                    </div>
                     <div>
                         <label>Permission Level</label>
                         <select onchange="commands[${cIdx}].perm=this.value; liveUpdateAll()">
@@ -157,21 +161,24 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label>Argument Name</label>
-                                    <input type="text" value="${p.name}" oninput="commands[${cIdx}].params[${pIdx}].name=this.value; liveUpdateAll()">
+                                    <label>Arg Name (auto-format)</label>
+                                    <input type="text" value="${p.name}" 
+                                           oninput="this.value = formatText(this.value); commands[${cIdx}].params[${pIdx}].name=this.value; liveUpdateAll()">
                                 </div>
                             </div>
 
                             ${p.type === 'Enum' ? `
                                 <div class="enum-container">
-                                    <label>Internal Enum ID</label>
-                                    <input type="text" value="${p.enumId}" oninput="commands[${cIdx}].params[${pIdx}].enumId=this.value; liveUpdateAll()">
+                                    <label>Internal Enum ID (auto-format)</label>
+                                    <input type="text" value="${p.enumId}" 
+                                           oninput="this.value = formatText(this.value); commands[${cIdx}].params[${pIdx}].enumId=this.value; liveUpdateAll()">
                                     
                                     <div style="margin-top:10px">
                                         <label>Enum Key Action Mappings:</label>
                                         ${p.enumOptions.map((opt, oIdx) => `
                                             <div style="border-bottom:1px solid #333; padding:10px 0;">
-                                                <input type="text" placeholder="Key" value="${opt.key}" oninput="commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].key=this.value; liveUpdateAll()">
+                                                <input type="text" placeholder="Key" value="${opt.key}" 
+                                                       oninput="this.value = formatText(this.value); commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].key=this.value; liveUpdateAll()">
                                                 ${opt.mcCommands.map((mcc, mIdx) => `
                                                     <div class="flex-row">
                                                         <input type="text" style="font-family:monospace; color:#a5f3fc" value="${mcc}" oninput="commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].mcCommands[${mIdx}]=this.value; liveUpdateAll()">
@@ -197,27 +204,21 @@
         liveUpdateAll();
     }
 
-    // Fungsi untuk update teks PREVIEW & KODE tanpa merusak input (Anti-keyboard close)
     function liveUpdateAll() {
         const ns = document.getElementById('global_ns').value;
-
-        // 1. Update Preview Minecraft UI untuk setiap command
         commands.forEach((cmd, cIdx) => {
             const previewBox = document.getElementById(`preview-box-${cIdx}`);
             if (previewBox) {
                 let syntax = `/${ns}:${cmd.name}`;
                 cmd.params.forEach(p => {
-                    syntax += p.type === 'Enum' ? ` <${p.enumId.toLowerCase()}>` : ` <${p.name}>`;
+                    syntax += p.type === 'Enum' ? ` <${p.enumId}>` : ` <${p.name}>`;
                 });
-
                 previewBox.innerHTML = `
                     <div class="mc-cmd">/${ns}:${cmd.name} <span style="color:var(--mc-gray)">- ${cmd.desc}</span></div>
                     <div class="mc-usage">Usage: ${syntax}</div>
                 `;
             }
         });
-
-        // 2. Update Code Preview di bagian bawah
         document.getElementById('code_preview').textContent = activeTab === 'js' ? generateScript() : generateManifest();
     }
 
@@ -240,7 +241,7 @@
         js += `system.beforeEvents.startup.subscribe((init) => {\n`;
         commands.forEach(cmd => {
             cmd.params.forEach(p => {
-                if (p.type === 'Enum') js += `    init.customCommandRegistry.registerEnum("${ns}:${p.enumId.toLowerCase()}", LIST_${p.enumId.toUpperCase()});\n`;
+                if (p.type === 'Enum') js += `    init.customCommandRegistry.registerEnum("${ns}:${p.enumId}", LIST_${p.enumId.toUpperCase()});\n`;
             });
             const args = cmd.params.length > 0 ? ", " + cmd.params.map(p => p.name).join(', ') : "";
             js += `
@@ -254,7 +255,7 @@
         mandatoryParameters: [
             ${cmd.params.map(p => `{
                 type: CustomCommandParamType.${p.type},
-                name: "${p.type === 'Enum' ? `${ns}:${p.enumId.toLowerCase()}` : p.name}"
+                name: "${p.type === 'Enum' ? `${ns}:${p.enumId}` : p.name}"
             }`).join(',\n            ')}
         ]`;
             }
@@ -313,7 +314,6 @@
         link.click();
     }
 
-    // Mulai dengan 1 command
     addNewCommand();
 </script>
 
