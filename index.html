@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ultimate MCPE Command BP Generator</title>
     <!-- JSZip Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -12,40 +12,147 @@
             --text: #c9d1d9; --accent: #58a6ff; --danger: #f85149;
             --success: #238636; --warning: #d29922; --mc-gray: #AAAAAA;
         }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }
-        .container { max-width: 1100px; margin: 0 auto; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; position: relative; }
+        
+        * { box-sizing: border-box; }
+
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            padding: 15px; 
+            margin: 0; 
+            overflow-x: hidden;
+        }
+
+        .container { width: 100%; max-width: 1100px; margin: 0 auto; }
+
+        .header-section { text-align: center; margin-bottom: 20px; }
+
+        .card { 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            position: relative;
+            width: 100%;
+        }
         
         /* Minecraft Preview Style */
-        .preview-box { background: rgba(0, 0, 0, 0.8); border-radius: 4px; padding: 12px; margin-bottom: 15px; border-left: 4px solid var(--success); font-family: 'Consolas', monospace; }
-        .mc-cmd { color: #f1f1f1; font-size: 0.95rem; margin-bottom: 5px; }
-        .mc-usage { color: #55FF55; font-size: 0.9rem; margin-top: 5px; }
+        .preview-box { 
+            background: rgba(0, 0, 0, 0.85); 
+            border-radius: 4px; 
+            padding: 12px; 
+            margin-bottom: 15px; 
+            border-left: 4px solid var(--success); 
+            font-family: 'Consolas', monospace;
+            word-wrap: break-word;
+        }
+        .mc-cmd { color: #f1f1f1; font-size: 0.9rem; margin-bottom: 5px; }
+        .mc-usage { color: #55FF55; font-size: 0.85rem; }
 
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        label { display: block; font-size: 0.85rem; color: #8b949e; margin-bottom: 5px; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 10px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem; }
+        .form-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+            margin-bottom: 12px; 
+        }
+
+        /* Responsive Grid for Mobile */
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            body { padding: 10px; }
+        }
+
+        label { display: block; font-size: 0.8rem; color: #8b949e; margin-bottom: 4px; font-weight: bold; }
         
-        .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-        .btn-add { background: var(--accent); color: white; width: 100%; margin-bottom: 20px; }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 10px; 
+            background: #0d1117; 
+            border: 1px solid var(--border); 
+            color: white; 
+            border-radius: 6px; 
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .btn { 
+            padding: 10px 15px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .btn-add { background: var(--accent); color: white; width: 100%; margin-bottom: 15px; }
         .btn-danger { background: rgba(248, 81, 73, 0.1); color: var(--danger); border: 1px solid var(--danger); }
+        .btn-danger-small { padding: 5px 10px; font-size: 0.75rem; }
         .btn-warning { background: var(--warning); color: black; font-size: 0.75rem; margin-top: 5px; }
-        .btn-download { background: var(--success); color: white; width: 100%; font-size: 1.2rem; padding: 18px; margin-top: 20px; box-shadow: 0 4px 15px rgba(35, 134, 54, 0.4); }
+        .btn-download { background: var(--success); color: white; width: 100%; font-size: 1.1rem; padding: 15px; margin-top: 20px; box-shadow: 0 4px 12px rgba(35, 134, 54, 0.3); }
         
-        .param-box { border-left: 4px solid var(--accent); padding-left: 15px; margin: 15px 0; background: rgba(255, 255, 255, 0.02); padding-bottom: 10px; border-radius: 0 8px 8px 0; }
-        .enum-container { background: #0d1117; border: 1px solid var(--warning); padding: 15px; border-radius: 6px; margin-top: 10px; }
-        .flex-row { display: flex; gap: 10px; align-items: center; margin-top: 5px; }
-        pre { background: #000; padding: 20px; border-radius: 8px; overflow-x: auto; border: 1px solid var(--border); color: #79c0ff; font-family: 'Consolas', monospace; font-size: 0.8rem; height: 350px; }
+        .param-box { 
+            border-left: 3px solid var(--accent); 
+            padding-left: 12px; 
+            margin: 15px 0; 
+            background: rgba(255, 255, 255, 0.02); 
+            padding-bottom: 10px; 
+            border-radius: 0 8px 8px 0; 
+        }
+
+        .enum-container { 
+            background: #0d1117; 
+            border: 1px solid var(--warning); 
+            padding: 12px; 
+            border-radius: 6px; 
+            margin-top: 10px; 
+        }
+
+        .enum-option-row {
+            border-bottom: 1px solid #30363d;
+            padding: 10px 0;
+            margin-bottom: 5px;
+        }
+
+        .flex-row { display: flex; gap: 8px; align-items: center; margin-top: 5px; }
+        .flex-row input { flex: 1; }
+
+        pre { 
+            background: #000; 
+            padding: 15px; 
+            border-radius: 8px; 
+            overflow: auto; 
+            border: 1px solid var(--border); 
+            color: #79c0ff; 
+            font-family: 'Consolas', monospace; 
+            font-size: 0.75rem; 
+            height: 300px;
+            white-space: pre;
+        }
         
-        .tabs { display: flex; gap: 5px; margin-bottom: -1px; }
-        .tab { padding: 10px 20px; background: #21262d; border: 1px solid var(--border); border-radius: 8px 8px 0 0; cursor: pointer; opacity: 0.7; }
+        .tabs { display: flex; gap: 4px; margin-bottom: -1px; }
+        .tab { 
+            padding: 8px 15px; 
+            background: #21262d; 
+            border: 1px solid var(--border); 
+            border-radius: 6px 6px 0 0; 
+            cursor: pointer; 
+            opacity: 0.7;
+            font-size: 0.8rem;
+        }
         .tab.active { background: var(--card); border-bottom-color: var(--card); opacity: 1; color: var(--accent); font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div style="text-align:center">
-        <h1>BP Custom Command Generator</h1>
+    <div class="header-section">
+        <h1>BP Command Generator</h1>
         <p style="color: #8b949e">By @VelixsCraftMCYT | Lowercase & Underscore Auto-Formatter</p>
     </div>
 
@@ -54,10 +161,10 @@
         <div class="form-grid">
             <div>
                 <label>Pack Name</label>
-                <input type="text" id="pack_name" value="Generated Custom Command BP" oninput="liveUpdateAll()">
+                <input type="text" id="pack_name" value="Custom Command BP" oninput="liveUpdateAll()">
             </div>
             <div>
-                <label>Global Namespace (lowercase_only)</label>
+                <label>Global Namespace (auto-format)</label>
                 <input type="text" id="global_ns" value="namespace" 
                        oninput="this.value = this.value.toLowerCase().replace(/\s+/g, '_'); liveUpdateAll()">
             </div>
@@ -68,15 +175,15 @@
     <div id="commands_ui"></div>
     <button class="btn btn-add" onclick="addNewCommand()">+ Add New Command</button>
 
-    <!-- Previews and Download -->
-    <div style="margin-top: 40px;">
+    <!-- Previews -->
+    <div style="margin-top: 20px;">
         <div class="tabs">
             <div class="tab active" id="tab-js" onclick="switchTab('js')">scripts/CustomCommands.js</div>
             <div class="tab" id="tab-manifest" onclick="switchTab('manifest')">manifest.json</div>
         </div>
         <div class="card" style="border-radius: 0 8px 8px 8px;">
             <pre id="code_preview"></pre>
-            <button class="btn btn-download" onclick="generateZip()">Download Custom commands BP.mcpack.zip</button>
+            <button class="btn btn-download" onclick="generateZip()">Download .mcpack.zip</button>
         </div>
     </div>
 </div>
@@ -88,7 +195,6 @@
     
     const uuids = { h: crypto.randomUUID(), m1: crypto.randomUUID(), m2: crypto.randomUUID() };
 
-    // Fungsi pembantu untuk memformat teks (lowercase & underscore)
     function formatText(val) {
         return val.toLowerCase().replace(/\s+/g, '_');
     }
@@ -105,9 +211,8 @@
         renderUI();
     }
 
-    function addParam(cmdId) {
-        const cmd = commands.find(c => c.id === cmdId);
-        cmd.params.push({
+    function addParam(cmdIdx) {
+        commands[cmdIdx].params.push({
             type: "Enum",
             name: "choice",
             enumId: "action_map",
@@ -123,27 +228,26 @@
         commands.forEach((cmd, cIdx) => {
             const div = document.createElement('div');
             div.className = 'card';
-            div.id = `cmd-card-${cIdx}`;
             div.innerHTML = `
                 <div class="preview-box" id="preview-box-${cIdx}"></div>
 
                 <div class="form-grid">
                     <div>
-                        <label>Name (auto-format)</label>
-                        <input type="text" value="${cmd.name}" 
-                               oninput="this.value = formatText(this.value); commands[${cIdx}].name=this.value; liveUpdateAll()">
+                        <label>Name</label>
+                        <input type="text" value="${cmd.name}" oninput="this.value=formatText(this.value); commands[${cIdx}].name=this.value; liveUpdateAll()">
                     </div>
                     <div>
-                        <label>Permission Level</label>
+                        <label>Permission</label>
                         <select onchange="commands[${cIdx}].perm=this.value; liveUpdateAll()">
                             <option>Any</option><option>Admin</option><option>Host</option><option>GameDirectors</option>
                         </select>
                     </div>
                 </div>
+
                 <div class="form-grid">
                     <div><label>Description</label><input type="text" value="${cmd.desc}" oninput="commands[${cIdx}].desc=this.value; liveUpdateAll()"></div>
                     <div>
-                        <label>Cheats Required</label>
+                        <label>Cheats</label>
                         <select onchange="commands[${cIdx}].cheats=(this.value==='true'); liveUpdateAll()">
                             <option value="false">False</option><option value="true">True</option>
                         </select>
@@ -161,27 +265,163 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label>Arg Name (auto-format)</label>
-                                    <input type="text" value="${p.name}" 
-                                           oninput="this.value = formatText(this.value); commands[${cIdx}].params[${pIdx}].name=this.value; liveUpdateAll()">
+                                    <label>Arg Name</label>
+                                    <input type="text" value="${p.name}" oninput="this.value=formatText(this.value); commands[${cIdx}].params[${pIdx}].name=this.value; liveUpdateAll()">
                                 </div>
                             </div>
 
                             ${p.type === 'Enum' ? `
                                 <div class="enum-container">
-                                    <label>Internal Enum ID (auto-format)</label>
-                                    <input type="text" value="${p.enumId}" 
-                                           oninput="this.value = formatText(this.value); commands[${cIdx}].params[${pIdx}].enumId=this.value; liveUpdateAll()">
+                                    <label>Internal Enum ID</label>
+                                    <input type="text" value="${p.enumId}" oninput="this.value=formatText(this.value); commands[${cIdx}].params[${pIdx}].enumId=this.value; liveUpdateAll()">
                                     
                                     <div style="margin-top:10px">
-                                        <label>Enum Key Action Mappings:</label>
+                                        <label>Enum Actions:</label>
                                         ${p.enumOptions.map((opt, oIdx) => `
-                                            <div style="border-bottom:1px solid #333; padding:10px 0;">
-                                                <input type="text" placeholder="Key" value="${opt.key}" 
-                                                       oninput="this.value = formatText(this.value); commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].key=this.value; liveUpdateAll()">
+                                            <div class="enum-option-row">
+                                                <div class="flex-row">
+                                                    <input type="text" placeholder="Key" value="${opt.key}" oninput="this.value=formatText(this.value); commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].key=this.value; liveUpdateAll()">
+                                                    <button class="btn btn-danger btn-danger-small" onclick="commands[${cIdx}].params[${pIdx}].enumOptions.splice(${oIdx},1); renderUI()">X</button>
+                                                </div>
                                                 ${opt.mcCommands.map((mcc, mIdx) => `
                                                     <div class="flex-row">
-                                                        <input type="text" style="font-family:monospace; color:#a5f3fc" value="${mcc}" oninput="commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].mcCommands[${mIdx}]=this.value; liveUpdateAll()">
+                                                        <input type="text" style="color:#a5f3fc" value="${mcc}" oninput="commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].mcCommands[${mIdx}]=this.value; liveUpdateAll()">
+                                                        <button class="btn btn-danger btn-danger-small" onclick="commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].mcCommands.splice(${mIdx},1); renderUI()">X</button>
+                                                    </div>
+                                                `).join('')}
+                                                <button class="btn btn-warning" onclick="commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].mcCommands.push('say command'); renderUI()">+ Add Command</button>
+                                            </div>
+                                        `).join('')}
+                                        <button class="btn btn-add" style="margin-top:10px; font-size:0.7rem" onclick="commands[${cIdx}].params[${pIdx}].enumOptions.push({key:'new_choice',mcCommands:[]}); renderUI()">+ Add Key Option</button>
+                                    </div>
+                                </div>
+                            ` : ''}
+                            <button class="btn btn-danger" style="width:100%; margin-top:10px" onclick="commands[${cIdx}].params.splice(${pIdx},1); renderUI()">Remove Parameter</button>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="btn btn-add" style="background:#21262d; font-size:0.8rem;" onclick="addParam(${cIdx})">+ Add Parameter</button>
+                <button class="btn btn-danger" style="float:right;" onclick="commands.splice(${cIdx},1); renderUI()">Delete Command</button>
+            `;
+            container.appendChild(div);
+        });
+        liveUpdateAll();
+    }
+
+    function liveUpdateAll() {
+        const ns = document.getElementById('global_ns').value;
+        commands.forEach((cmd, cIdx) => {
+            const previewBox = document.getElementById(`preview-box-${cIdx}`);
+            if (previewBox) {
+                let syntax = `/${ns}:${cmd.name}`;
+                cmd.params.forEach(p => {
+                    syntax += p.type === 'Enum' ? ` <${p.enumId}>` : ` <${p.name}>`;
+                });
+                previewBox.innerHTML = `
+                    <div class="mc-cmd">/${ns}:${cmd.name} <span style="color:var(--mc-gray)">- ${cmd.desc}</span></div>
+                    <div class="mc-usage">Usage: ${syntax}</div>
+                `;
+            }
+        });
+        document.getElementById('code_preview').textContent = activeTab === 'js' ? generateScript() : generateManifest();
+    }
+
+    function generateScript() {
+        const ns = document.getElementById('global_ns').value;
+        let js = `import {\n    world,\n    system,\n    CommandPermissionLevel,\n    CustomCommandStatus,\n    CustomCommandParamType,\n} from "@minecraft/server";\n\n`;
+
+        commands.forEach(cmd => {
+            cmd.params.forEach(p => {
+                if (p.type === 'Enum') {
+                    js += `const ACTIONS_${p.enumId.toUpperCase()} = {\n`;
+                    p.enumOptions.forEach(o => {
+                        js += `    ${o.key}: [\n        ${o.mcCommands.map(c => `"${c}"`).join(',\n        ')}\n    ],\n`;
+                    });
+                    js += `};\nconst LIST_${p.enumId.toUpperCase()} = Object.keys(ACTIONS_${p.enumId.toUpperCase()});\n\n`;
+                }
+            });
+        });
+
+        js += `system.beforeEvents.startup.subscribe((init) => {\n`;
+        commands.forEach(cmd => {
+            cmd.params.forEach(p => {
+                if (p.type === 'Enum') js += `    init.customCommandRegistry.registerEnum("${ns}:${p.enumId}", LIST_${p.enumId.toUpperCase()});\n`;
+            });
+            const args = cmd.params.length > 0 ? ", " + cmd.params.map(p => p.name).join(', ') : "";
+            js += `
+    init.customCommandRegistry.registerCommand({
+        name: "${ns}:${cmd.name}",
+        description: "${cmd.desc}",
+        permissionLevel: CommandPermissionLevel.${cmd.perm},
+        cheatsRequired: ${cmd.cheats}${cmd.params.length > 0 ? ',' : ''}`;
+            if (cmd.params.length > 0) {
+                js += `
+        mandatoryParameters: [
+            ${cmd.params.map(p => `{
+                type: CustomCommandParamType.${p.type},
+                name: "${p.type === 'Enum' ? `${ns}:${p.enumId}` : p.name}"
+            }`).join(',\n            ')}
+        ]`;
+            }
+            js += `
+    },
+    ({ sourceEntity }${args}) => {
+        const player = sourceEntity;
+        if (!player?.runCommand) return { status: CustomCommandStatus.Failure };
+        system.run(() => {\n`;
+            if(cmd.params.length === 0) js += `            player.runCommand("say Command Executed!");\n`;
+            else cmd.params.forEach(p => {
+                if (p.type === 'Enum') js += `            const cmds_${p.name} = ACTIONS_${p.enumId.toUpperCase()}[${p.name}];\n            if (cmds_${p.name}) cmds_${p.name}.forEach(c => player.runCommand(c));\n`;
+                else js += `            player.sendMessage("§a[${ns}] Received ${p.name}: §f" + ${p.name});\n`;
+            });
+            js += `        });
+        return { status: CustomCommandStatus.Success };
+    });\n`;
+        });
+        js += `\n});`;
+        return js;
+    }
+
+    function generateManifest() {
+        return JSON.stringify({
+            format_version: 2,
+            header: {
+                name: document.getElementById('pack_name').value,
+                description: "Generator by @VelixsCraftMCYT",
+                min_engine_version: [1, 26, 0],
+                uuid: uuids.h,
+                version: [1, 0, 0]
+            },
+            modules: [
+                { type: "data", uuid: uuids.m1, version: [1, 0, 0] },
+                { type: "script", language: "javascript", uuid: uuids.m2, entry: "scripts/CustomCommands.js", version: [1, 0, 0] }
+            ],
+            dependencies: [ { module_name: "@minecraft/server", version: "2.4.0" } ]
+        }, null, "\t");
+    }
+
+    function switchTab(t) {
+        activeTab = t;
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+        document.getElementById('tab-' + t).classList.add('active');
+        liveUpdateAll();
+    }
+
+    async function generateZip() {
+        const zip = new JSZip();
+        zip.file("manifest.json", generateManifest());
+        zip.folder("scripts").file("CustomCommands.js", generateScript());
+        const content = await zip.generateAsync({type: "blob"});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(content);
+        link.download = document.getElementById('pack_name').value + ".mcpack.zip";
+        link.click();
+    }
+
+    addNewCommand();
+</script>
+</body>
+    </html>nt-family:monospace; color:#a5f3fc" value="${mcc}" oninput="commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].mcCommands[${mIdx}]=this.value; liveUpdateAll()">
                                                         <button class="btn btn-danger" style="padding:5px 10px" onclick="commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].mcCommands.splice(${mIdx},1); renderUI()">X</button>
                                                     </div>
                                                 `).join('')}
