@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate MCPE Command BP Generator</title>
+    <!-- JSZip Library for Folder/Zip creation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        :root {
+            --bg: #0d1117; --card: #161b22; --border: #30363d;
+            --text: #c9d1d9; --accent: #58a6ff; --danger: #f85149;
+            --success: #238636; --warning: #d29922;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        label { display: block; font-size: 0.85rem; color: #8b949e; margin-bottom: 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem; }
+        .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .btn-add { background: var(--accent); color: white; width: 100%; margin-bottom: 20px; }
+        .btn-danger { background: rgba(248, 81, 73, 0.1); color: var(--danger); border: 1px solid var(--danger); font-size: 0.8rem;}
+        .btn-warning { background: var(--warning); color: black; font-size: 0.8rem; margin-top: 5px;}
+        .btn-download { background: var(--success); color: white; width: 100%; font-size: 1.2rem; padding: 18px; margin-top: 20px; box-shadow: 0 4px 15px rgba(35, 134, 54, 0.4); }
+        .param-box { border-left: 4px solid var(--accent); padding-left: 15px; margin: 15px 0; background: rgba(255, 255, 255, 0.02); padding-bottom: 10px; border-radius: 0 8px 8px 0; }
+        .enum-container { background: #0d1117; border: 1px solid var(--warning); padding: 15px; border-radius: 6px; margin-top: 10px; }
+        .enum-option { border-bottom: 1px solid #30363d; padding: 10px 0; }
+        .mc-cmd-input { margin-top: 5px; border-color: #444; font-family: monospace; color: #a5f3fc; }
+        pre { background: #000; padding: 20px; border-radius: 8px; overflow-x: auto; border: 1px solid var(--border); color: #79c0ff; font-family: 'Consolas', monospace; font-size: 0.8rem; height: 350px; }
+        .tabs { display: flex; gap: 5px; margin-bottom: -1px; }
+        .tab { padding: 10px 20px; background: #21262d; border: 1px solid var(--border); border-radius: 8px 8px 0 0; cursor: pointer; opacity: 0.7; }
+        .tab.active { background: var(--card); border-bottom-color: var(--card); opacity: 1; color: var(--accent); font-weight: bold; }
+        .flex-row { display: flex; gap: 10px; align-items: center; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div style="text-align:center">
+        <h1>BP Custom Command Generator</h1>
+        <p style="color: #8b949e">By @VelixsCraftMCYT | Supports Script API v2.4.0</p>
+    </div>
+
+    <div class="card">
+        <div class="form-grid">
+            <div>
+                <label>Pack Name</label>
+                <input type="text" id="pack_name" value="Generated Custom Command BP" oninput="updateAll()">
+            </div>
+            <div>
+                <label>Global Namespace (prefix:)</label>
+                <input type="text" id="global_ns" value="namespace" oninput="updateAll()">
+            </div>
+        </div>
+    </div>
+
+    <div id="commands_ui"></div>
+    <button class="btn btn-add" onclick="addNewCommand()">+ Add New Command</button>
+
+    <div style="margin-top: 40px;">
+        <div class="tabs">
+            <div class="tab active" id="tab-js" onclick="switchTab('js')">scripts/CustomCommands.js</div>
+            <div class="tab" id="tab-manifest" onclick="switchTab('manifest')">manifest.json</div>
+        </div>
+        <div class="card" style="border-radius: 0 8px 8px 8px;">
+            <pre id="code_preview"></pre>
+            <button class="btn btn-download" onclick="generateZip()">Download Custom commands BP.mcpack.zip</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let commands = [];
+    let activeTab = 'js';
+    const paramTypes = ["BlockType", "Boolean", "EntitySelector", "EntityType", "Enum", "Float", "Integer", "ItemType", "Location", "PlayerSelector", "String"];
+    
+    // Auto-generate UUIDs for the Manifest
+    const uuids = {
+        h: crypto.randomUUID(),
+        m1: crypto.randomUUID(),
+        m2: crypto.randomUUID()
+    };
+
+    function addNewCommand() {
+        commands.push({
+            id: Date.now(),
+            name: "how",
+            desc: "Run multiple commands via logic",
+            perm: "Any",
+            cheats: false,
+            params: []
+        });
+        render();
+    }
+
+    function addParam(cmdId) {
+        const cmd = commands.find(c => c.id === cmdId);
+        cmd.params.push({
+            type: "Enum",
+            name: "my_arg",
+            enumId: "ACTION_LIST",
+            enumOptions: [
+                { key: "option_1", mcCommands: ["say Command 1 Executed", "say Command 2 Executed"] }
+            ]
+        });
+        render();
+    }
+
+    function addEnumOption(cmdId, pIdx) {
+        commands.find(c => c.id === cmdId).params[pIdx].enumOptions.push({
+            key: "new_choice", mcCommands: ["say new action"]
+        });
+        render();
+    }
+
+    function addMcCommand(cmdId, pIdx, oIdx) {
+        commands.find(c => c.id === cmdId).params[pIdx].enumOptions[oIdx].mcCommands.push("say next step");
+        updateAll(); render();
+    }
+
+    function render() {
+        const container = document.getElementById('commands_ui');
+        container.innerHTML = '';
+
+        commands.forEach((cmd, cIdx) => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.innerHTML = `
+                <div class="form-grid">
+                    <div><label>Command Name</label><input type="text" value="${cmd.name}" oninput="commands[${cIdx}].name=this.value;updateAll()"></div>
+                    <div>
+                        <label>Permission</label>
+                        <select onchange="commands[${cIdx}].perm=this.value;updateAll()">
+                            <option>Any</option><option>Admin</option><option>Host</option><option>GameDirectors</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div><label>Description</label><input type="text" value="${cmd.desc}" oninput="commands[${cIdx}].desc=this.value;updateAll()"></div>
+                    <div>
+                        <label>Cheats Required</label>
+                        <select onchange="commands[${cIdx}].cheats=(this.value==='true');updateAll()">
+                            <option value="false">False (No)</option><option value="true">True (Yes)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="params_${cmd.id}">
+                    ${cmd.params.map((p, pIdx) => `
+                        <div class="param-box">
+                            <div class="form-grid">
+                                <div>
+                                    <label>Parameter Type</label>
+                                    <select onchange="commands[${cIdx}].params[${pIdx}].type=this.value;render()">
+                                        ${paramTypes.map(t => `<option ${p.type===t?'selected':''}>${t}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Arg Variable Name</label>
+                                    <input type="text" value="${p.name}" oninput="commands[${cIdx}].params[${pIdx}].name=this.value;updateAll()">
+                                </div>
+                            </div>
+
+                            ${p.type === 'Enum' ? `
+                                <div class="enum-container">
+                                    <label>Internal Enum Name (Uppercase ID)</label>
+                                    <input type="text" value="${p.enumId}" oninput="commands[${cIdx}].params[${pIdx}].enumId=this.value;updateAll()">
+                                    
+                                    <div style="margin-top:10px">
+                                        <label>Enum Key Action Mappings:</label>
+                                        ${p.enumOptions.map((opt, oIdx) => `
+                                            <div class="enum-option">
+                                                <input type="text" placeholder="Key (e.g. heal_player)" value="${opt.key}" oninput="commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].key=this.value;updateAll()">
+                                                ${opt.mcCommands.map((mcc, mIdx) => `
+                                                    <div class="flex-row">
+                                                        <input type="text" class="mc-cmd-input" value="${mcc}" oninput="commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].mcCommands[${mIdx}]=this.value;updateAll()">
+                                                        <button class="btn btn-danger" style="padding:5px 10px" onclick="commands[${cIdx}].params[${pIdx}].enumOptions[${oIdx}].mcCommands.splice(${mIdx},1);render()">X</button>
+                                                    </div>
+                                                `).join('')}
+                                                <button class="btn btn-warning" onclick="addMcCommand(${cmd.id},${pIdx},${oIdx})">+ Add Command to Key</button>
+                                            </div>
+                                        `).join('')}
+                                        <button class="btn btn-add" style="margin-top:10px; font-size:0.75rem" onclick="addEnumOption(${cmd.id},${pIdx})">+ Add New Key Option</button>
+                                    </div>
+                                </div>
+                            ` : `
+                                <div style="font-size:0.8rem; color:var(--accent); margin-top:5px;">This will return a <b>${p.type}</b> value to the script.</div>
+                            `}
+                            <button class="btn btn-danger" style="width:100%; margin-top:10px" onclick="commands[${cIdx}].params.splice(${pIdx},1);render()">Delete Parameter</button>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="btn btn-add" style="background:#21262d; font-size:0.8rem;" onclick="addParam(${cmd.id})">+ Add Parameter</button>
+                <button class="btn btn-danger" style="float:right;" onclick="commands.splice(${cIdx},1);render()">Delete Command</button>
+            `;
+            container.appendChild(div);
+        });
+        updateAll();
+    }
+
+    function generateScript() {
+        const ns = document.getElementById('global_ns').value;
+        let js = `import {\n    world,\n    system,\n    CommandPermissionLevel,\n    CustomCommandStatus,\n    CustomCommandParamType,\n} from "@minecraft/server";\n\n`;
+
+        // Action Maps
+        commands.forEach(cmd => {
+            cmd.params.forEach(p => {
+                if (p.type === 'Enum') {
+                    js += `/* Action Mapping for Enum: ${p.enumId} */\nconst ACTIONS_${p.enumId.toUpperCase()} = {\n`;
+                    p.enumOptions.forEach(o => {
+                        js += `    ${o.key}: [\n        ${o.mcCommands.map(c => `"${c}"`).join(',\n        ')}\n    ],\n`;
+                    });
+                    js += `};\nconst LIST_${p.enumId.toUpperCase()} = Object.keys(ACTIONS_${p.enumId.toUpperCase()});\n\n`;
+                }
+            });
+        });
+
+        js += `system.beforeEvents.startup.subscribe((init) => {\n`;
+
+        // Register Enums
+        commands.forEach(cmd => {
+            cmd.params.forEach(p => {
+                if (p.type === 'Enum') {
+                    js += `    init.customCommandRegistry.registerEnum("${ns}:${p.enumId.toLowerCase()}", LIST_${p.enumId.toUpperCase()});\n`;
+                }
+            });
+
+            const argNames = cmd.params.length > 0 ? ", " + cmd.params.map(p => p.name).join(', ') : "";
+            
+            js += `
+    init.customCommandRegistry.registerCommand({
+        name: "${ns}:${cmd.name}",
+        description: "${cmd.desc}",
+        permissionLevel: CommandPermissionLevel.${cmd.perm},
+        cheatsRequired: ${cmd.cheats}${cmd.params.length > 0 ? ',' : ''}`;
+
+            if (cmd.params.length > 0) {
+                js += `
+        mandatoryParameters: [
+            ${cmd.params.map(p => `{
+                type: CustomCommandParamType.${p.type},
+                name: "${p.type === 'Enum' ? `${ns}:${p.enumId.toLowerCase()}` : p.name}"
+            }`).join(',\n            ')}
+        ]`;
+            }
+
+            js += `
+    },
+    ({ sourceEntity }${argNames}) => {
+        const player = sourceEntity;
+        if (!player?.runCommand) return { status: CustomCommandStatus.Failure };
+        system.run(() => {\n`;
+
+            if(cmd.params.length === 0) {
+                js += `            player.runCommand("say Command Executed!");\n`;
+            } else {
+                cmd.params.forEach(p => {
+                    if (p.type === 'Enum') {
+                        js += `            const cmds_${p.name} = ACTIONS_${p.enumId.toUpperCase()}[${p.name}];
+            if (cmds_${p.name}) cmds_${p.name}.forEach(c => player.runCommand(c));\n`;
+                    } else {
+                        js += `            player.sendMessage("§a[${ns}] Received ${p.name}: §f" + ${p.name});\n`;
+                    }
+                });
+            }
+
+            js += `        });
+        return { status: CustomCommandStatus.Success };
+    });\n`;
+        });
+
+        js += `\n});`;
+        return js;
+    }
+
+    function generateManifest() {
+        const manifest = {
+            format_version: 2,
+            header: {
+                name: document.getElementById('pack_name').value,
+                description: "Generator by @VelixsCraftMCYT",
+                min_engine_version: [1, 26, 0],
+                uuid: uuids.h,
+                version: [1, 0, 0]
+            },
+            modules: [
+                { type: "data", uuid: uuids.m1, version: [1, 0, 0] },
+                { 
+                    type: "script", 
+                    language: "javascript", 
+                    uuid: uuids.m2, 
+                    entry: "scripts/CustomCommands.js", 
+                    version: [1, 0, 0] 
+                }
+            ],
+            dependencies: [
+                { module_name: "@minecraft/server", version: "2.4.0" }
+            ]
+        };
+        return JSON.stringify(manifest, null, "\t");
+    }
+
+    function updateAll() {
+        const code = (activeTab === 'js') ? generateScript() : generateManifest();
+        document.getElementById('code_preview').textContent = code;
+    }
+
+    function switchTab(t) {
+        activeTab = t;
+        document.getElementById('tab-js').className = t === 'js' ? 'tab' : 'tab'; // Clear
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+        document.getElementById('tab-' + t).classList.add('active');
+        updateAll();
+    }
+
+    async function generateZip() {
+        const zip = new JSZip();
+        zip.file("manifest.json", generateManifest());
+        zip.folder("scripts").file("CustomCommands.js", generateScript());
+
+        const content = await zip.generateAsync({type: "blob"});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(content);
+        link.download = "Custom commands BP.mcpack.zip";
+        link.click();
+    }
+
+    addNewCommand();
+</script>
+
+</body>
+</html>
