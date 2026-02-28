@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Velixsaxy - Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="boot-screen"><img id="boot-logo" class="boot-logo" src="">
+        <div class="win-spinner"></div>
+        <div id="boot-console" class="boot-console"></div>
+    </div>
+    <div id="media-modal" class="modal-hidden"><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+        <div id="modal-content" class="modal-content"></div>
+    </div>
+
+    <button id="back-to-top" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
+    <div class="top-nav" id="top-nav">Creations</div>
+
+    <div class="main-container" id="scroll-area">
+        <div id="home" class="section active">
+            <div class="discord-profile">
+                <div class="ds-banner-wrapper">
+                    <img id="ds-banner" src="" class="ds-banner">
+                </div>
+
+                <div class="ds-avatar-area">
+                    <div class="ds-avatar-wrapper">
+                        <img id="profile-img" src="" class="ds-avatar">
+                        <img id="ds-deco" src="" class="ds-deco">
+                        <div class="ds-status-dot"></div>
+                    </div>
+                </div>
+
+                <div class="ds-content">
+                    <div id="profile-name" class="ds-username"></div>
+                    <div class="ds-tag">@velixsaxy</div>
+
+                    <div class="ds-divider"></div>
+
+                    <div class="ds-label">About Me</div>
+                    <div id="profile-bio" class="ds-bio"></div>
+
+                    <div class="ds-divider"></div>
+
+                    <div class="ds-label">Social Connections</div>
+                    <div class="social-buttons" id="social-container"></div>
+                </div>
+            </div>
+
+            <div class="section-title">Feed Singkat</div>
+            <div class="ig-grid" id="home-posts-grid"></div>
+            <div class="section-title">Alat Populer</div>
+            <div class="util-grid" id="home-utils-grid"></div>
+        </div>
+
+        <div id="post" class="section">
+            <div class="section-title">Feed</div>
+            <div class="filter-container" id="filter-post"></div>
+            <div id="post-container"></div>
+        </div>
+        <div id="util" class="section">
+            <div class="section-title">Utilities</div>
+            <div class="filter-container" id="filter-util"></div>
+            <div class="util-list" id="util-container"></div>
+        </div>
+    </div>
+
+    <div class="bottom-nav" id="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('home', this)"><i class="fas fa-user"></i><span>Profile</span></button>
+        <button class="nav-item" onclick="switchTab('post', this)"><i class="fas fa-comment-alt"></i><span>Post</span></button>
+        <button class="nav-item" onclick="switchTab('util', this)"><i class="fas fa-tools"></i><span>Utils</span></button>
+    </div>
+
+    <!-- Load Configs First -->
+    <script src="config/profile.js"></script>
+    <script src="config/posts.js"></script>
+    <script src="config/utilities.js"></script>
+
+    <!-- Load Logic Scripts -->
+    <script src="menu/script_posts.js"></script>
+    <script src="menu/script_utilities.js"></script>
+    <script src="menu/script_home.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
