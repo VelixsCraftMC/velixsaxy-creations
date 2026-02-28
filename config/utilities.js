@@ -22,8 +22,8 @@ const UTILS_CONFIG = [
     type: "Alat",
     title: "Magic Cosmetic Generator (Bedrock)",
     desc: "Mendukung Semua versi terbaru 1.21.130+",
-    thumb: "image/command.webp",
+    thumb: "image/magic_cosmetic.png",
     internalPost: "Magic Cosmetic",
-    externalLink: "html/command/index.html"
+    externalLink: "html/magic_cosmetic/index.html"
     }
 ];
