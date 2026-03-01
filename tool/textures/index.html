@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MC Atlas Generator Pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Navigation -->
+    <div class="ios-top-bar">
+        <a href="../../index.html" class="ios-back-btn">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            <span>Back</span>
+        </a>
+        <div class="ios-nav-title" id="nav-title">Flipbook Textures</div>
+        <div style="width: 60px;"></div>
+    </div>
+
+    <div class="container">
+        
+        <!-- TAB 1: FLIPBOOK -->
+        <div id="tab-flip" class="tab-content active">
+            <h1 class="ios-large-title">Flipbook</h1>
+            <div class="ios-info-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <div class="info-content">Gunakan untuk animasi texture item atau block.</div>
+            </div>
+
+            <div class="action-grid">
+                <button class="btn-action" onclick="document.getElementById('upFlip').click()">Bulk Upload</button>
+                <button class="btn-action" onclick="addManual('flip')">Add Manual</button>
+                <button class="btn-action" onclick="document.getElementById('importFlip').click()">Import JSON</button>
+            </div>
+            <input type="file" id="upFlip" multiple accept="image/*" hidden onchange="bulkUpload(this, 'flip')">
+            <input type="file" id="importFlip" accept=".json" hidden onchange="importJSON(this, 'flip')">
+
+            <div id="list-flip"></div>
+
+            <div class="preview-header-box">
+                <span class="file-name">flipbook_textures.json</span>
+                <button class="btn-copy" onclick="copyCode('codeFlip')">Copy</button>
+            </div>
+            <div class="code-wrapper"><pre id="codeFlip"></pre></div>
+            <button class="btn-download" onclick="exportJSON('flip')">Download .json</button>
+        </div>
+
+        <!-- TAB 2: ITEM -->
+        <div id="tab-item" class="tab-content">
+            <h1 class="ios-large-title">Item Texture</h1>
+            <div class="card">
+                <div class="form-row"><label>Pack Name</label><input type="text" id="itemRP" value="vanilla" oninput="updatePreview()"></div>
+                <div class="form-row"><label>Atlas Name</label><input type="text" id="itemAtlas" value="atlas.items" oninput="updatePreview()"></div>
+            </div>
+
+            <div class="action-grid">
+                <button class="btn-action" onclick="document.getElementById('upItem').click()">Bulk Upload</button>
+                <button class="btn-action" onclick="addManual('item')">Add Manual</button>
+                <button class="btn-action" onclick="document.getElementById('importItem').click()">Import JSON</button>
+            </div>
+            <input type="file" id="upItem" multiple accept="image/*" hidden onchange="bulkUpload(this, 'item')">
+            <input type="file" id="importItem" accept=".json" hidden onchange="importJSON(this, 'item')">
+
+            <div id="list-item"></div>
+
+            <div class="preview-header-box">
+                <span class="file-name">item_texture.json</span>
+                <button class="btn-copy" onclick="copyCode('codeItem')">Copy</button>
+            </div>
+            <div class="code-wrapper"><pre id="codeItem"></pre></div>
+            <button class="btn-download" style="background:var(--success)" onclick="exportJSON('item')">Download .json</button>
+        </div>
+
+        <!-- TAB 3: TERRAIN -->
+        <div id="tab-terrain" class="tab-content">
+            <h1 class="ios-large-title">Terrain</h1>
+            <div class="card">
+                <div class="form-row"><label>Pack Name</label><input type="text" id="terrainRP" value="vanilla" oninput="updatePreview()"></div>
+                <div class="form-row"><label>Padding</label><input type="number" id="terrainPad" value="8" oninput="updatePreview()"></div>
+            </div>
+
+            <div class="action-grid">
+                <button class="btn-action" onclick="document.getElementById('upTerrain').click()">Bulk Upload</button>
+                <button class="btn-action" onclick="addManual('terrain')">Add Manual</button>
+                <button class="btn-action" onclick="document.getElementById('importTerrain').click()">Import JSON</button>
+            </div>
+            <input type="file" id="upTerrain" multiple accept="image/*" hidden onchange="bulkUpload(this, 'terrain')">
+            <input type="file" id="importTerrain" accept=".json" hidden onchange="importJSON(this, 'terrain')">
+
+            <div id="list-terrain"></div>
+
+            <div class="preview-header-box">
+                <span class="file-name">terrain_texture.json</span>
+                <button class="btn-copy" onclick="copyCode('codeTerrain')">Copy</button>
+            </div>
+            <div class="code-wrapper"><pre id="codeTerrain"></pre></div>
+            <button class="btn-download" style="background:var(--warning)" onclick="exportJSON('terrain')">Download .json</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="ios-bottom-bar">
+        <div class="ios-tab active" onclick="switchMenu('flip', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 3v18M17 3v18M3 7h18M3 17h18"/></svg>
+            <span>Flipbook</span>
+        </div>
+        <div class="ios-tab" onclick="switchMenu('item', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.2 7.8l-2.6 2.6-4.4-4.4 2.6-2.6a2 2 0 0 1 2.8 0l1.6 1.6a2 2 0 0 1 0 2.8zM12.5 6.7L4.7 14.5a2.1 2.1 0 0 0-.5.8L3 21l5.7-1.2c.3-.1.6-.3.8-.5l7.8-7.8-4.8-4.8z"/></svg>
+            <span>Items</span>
+        </div>
+        <div class="ios-tab" onclick="switchMenu('terrain', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            <span>Terrain</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
