@@ -23,7 +23,7 @@ const config = {
             konten_dalam: [{
                 judul: "(Ini sangat mudah jadi kamu bisa paham)",
                 button: [{
-                    text: "Manifest.json Generator",
+                    text: "Items textures data Generator",
                     link: "tool/textures/index.html",
                     primary: true
                 }]
@@ -49,8 +49,21 @@ const config = {
             konten_dalam: [{
                 judul: "(Ini sangat mudah jadi kamu bisa paham)",
                 button: [{
-                    text: "Manifest.json Generator",
+                    text: "Catalog Items Generator",
                     link: "tool/catalog/index.html",
+                    primary: true
+                }]
+            }]
+        },
+        {
+            ikon: "tool/sound_definitions/pack.webp",
+            nama: "Sounds Definitions (Generator)",
+            teks: "» membuat Suara Definitions atau effect suara dengan mudah",
+            konten_dalam: [{
+                judul: "(Ini sangat mudah jadi kamu bisa paham)",
+                button: [{
+                    text: "Sound Definitions Generator",
+                    link: "tool/sound_definitions/index.html",
                     primary: true
                 }]
             }]
@@ -61,7 +74,7 @@ const config = {
             teks: "» Generator UUID dengan mudah",
             konten_dalam: [{
                 button: [{
-                    text: "Manifest.json Generator",
+                    text: "UUID Generator",
                     link: "tool/uuid/index.html",
                     primary: true
                 }]
