@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Ezora Studios - @VelixsCraftMCYT</title>
-    
+
     <!-- Hubungkan ke CSS -->
     <link rel="stylesheet" href="style.css">
-    
+
     <!-- Ikon Apple (Ionicons) -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
+
 <body>
 
     <!-- iOS TOP BAR (GLASSMORPHISM) -->
@@ -25,45 +27,25 @@
     <!-- MAIN CONTAINER -->
     <main class="container">
 
-        <!-- ==========================================
-             TAB 1: TOOLS (HALAMAN UTAMA)
-             ========================================== -->
+        <!-- SECTION: TOOLS -->
         <section id="tab-tools" class="tab-content active">
             <h1 class="ios-large-title">Ezora Tools</h1>
-            <p class="ios-subtitle">Kumpulan alat kreativitas & aset</p>
 
-            <!-- Box Informasi -->
-            <div class="info-box">
-                <div class="info-title">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                    Informasi
-                </div>
-                <div class="info-content">
-                    <ul>
-                        <li>Project VelixsCraftMCYT Akan terus di kerjakan</li>
-                        <li>Hal² yang sudah di buat akan di update selalu</li>
-                    </ul>
-                </div>
+            <!-- TEMPAT INFORMASI & CATATAN (Dihasilkan oleh JS) -->
+            <div id="info-section-container"></div>
+
+            <!-- Banner Slider (Area yang sudah kita buat sebelumnya) -->
+            <div class="ios-slider-container">
+                <div class="slider-wrapper" id="banner-slider"></div>
+                <div class="slider-dots" id="banner-dots"></div>
             </div>
 
-            <!-- Box Catatan -->
-            <div class="info-box" style="background: rgba(255, 149, 0, 0.1);">
-                <div class="info-title" style="color: var(--warning);">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                    Catatan
+            <!-- SISTEM PENCARIAN (iOS Style) -->
+            <div class="ios-search-container">
+                <div class="search-input-wrapper">
+                    <ion-icon name="search-outline" class="search-icon"></ion-icon>
+                    <input type="text" id="tool-search" placeholder="Cari tool, post, atau download..." oninput="handleSearch()">
                 </div>
-                <div class="info-content">
-                    <ul>
-                        <li>Lisensi masih berlaku</li>
-                        <li>Dimohon selalu memberikan tag <b>@velixsaxy</b> di setiap video yang menggunakan asset saya seperti anvil rename, magic skin, magic cosmetic, 3d items yang bersifat addons bukan tool/generator</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Banner Halaman Tool -->
-            <div class="banner-area" style="margin: 24px 0;">
-                <img src="banner/bb2.webp" 
-                     style="width:100%; border-radius:14px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" alt="Banner Tool">
             </div>
 
             <!-- TAB MENU (SEGMENTED CONTROL) -->
@@ -97,38 +79,34 @@
 
 
         <!-- SECTION: CREATOR (PROFIL) -->
-<section id="tab-creator" class="tab-content" style="display:none;">
-    <h1 class="ios-large-title">Creator</h1>
-    <p class="ios-subtitle">Mengenal pengembangan Project Oleh @VelixsCraftMCYT</p>
+        <section id="tab-creator" class="tab-content" style="display:none;">
+            <h1 class="ios-large-title">Creator</h1>
+            <p class="ios-subtitle">Mengenal pengembangan Project Oleh @VelixsCraftMCYT</p>
 
-    <!-- TULISAN BERJALAN (MARQUEE) -->
-    <div class="ios-marquee-wrapper">
-        <div class="marquee-content" id="marquee-text">
-            Halo selamat datang di Ezora Studios, disini adalah tempat project ada
-        </div>
-    </div>
+            <!-- TULISAN BERJALAN (MARQUEE) -->
+            <div class="ios-marquee-wrapper">
+                <div class="marquee-content" id="marquee-text">
+                    Halo selamat datang di Ezora Studios, disini adalah tempat project ada
+                </div>
+            </div>
 
-    <div class="card" style="padding: 0; overflow: hidden; border: 0.5px solid var(--border);">
-        <!-- Banner Profil -->
-        <img id="creator-banner" src="" style="width:100%; height:140px; object-fit:cover;" alt="Banner">
-        <!-- ... sisa kode profil ... -->
-                
+            <div class="card" style="padding: 0; overflow: hidden; border: 0.5px solid var(--border);">
+                <!-- Banner Profil -->
+                <img id="creator-banner" src="" style="width:100%; height:140px; object-fit:cover;" alt="Banner">
+                <!-- ... sisa kode profil ... -->
+
                 <div style="padding: 16px; text-align: center; margin-top: -55px;">
                     <!-- Profile Wrapper (Foto + Dekorasi melayang) -->
                     <div class="profile-wrapper" style="position: relative; display: inline-block;">
-                        <img id="creator-profile" src="" 
-                             style="width:85px; height:85px; border-radius:50%; border: 4px solid var(--card); background: var(--card); position: relative; z-index: 1;" 
-                             alt="Profile Pic">
-                        
+                        <img id="creator-profile" src="" style="width:85px; height:85px; border-radius:50%; border: 4px solid var(--card); background: var(--card); position: relative; z-index: 1;" alt="Profile Pic">
+
                         <!-- Decoration Profile (Discord Style) -->
-                        <img id="creator-decoration" src="" 
-                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 125px; height: 125px; z-index: 2; pointer-events: none;" 
-                             alt="Profile Decoration">
+                        <img id="creator-decoration" src="" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 125px; height: 125px; z-index: 2; pointer-events: none;" alt="Profile Decoration">
                     </div>
-                    
+
                     <h3 id="creator-name" style="margin: 12px 0 4px 0; font-size: 22px; font-weight: 700;"></h3>
                     <p id="creator-bio" class="pre-line" style="font-size: 14px; color: var(--text-sec); line-height: 1.5; margin-bottom: 20px;"></p>
-                    
+
                     <!-- Tombol Sosial -->
                     <div id="creator-socials" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                         <!-- Tombol Youtube, WA, Discord di sini -->
@@ -147,7 +125,7 @@
         <section id="tab-changelogs" class="tab-content" style="display:none;">
             <h1 class="ios-large-title">Updates</h1>
             <p class="ios-subtitle">Riwayat pembaruan Projects - Ezora Studios</p>
-            
+
             <div id="changelogs-container">
                 <!-- JS akan merender list changelogs di sini -->
             </div>
@@ -171,8 +149,69 @@
         </a>
     </nav>
 
-    <!-- Hubungkan ke JS -->
-    <script src="konfigurasi_tool.js"></script>
+    <!-- POPUP ADS ELEMENT (Sesuai Permintaan: Di atas Navigation Bottom) -->
+    <div id="popup-ads-player" class="ios-ads-player">
+        <div class="ads-image-container">
+            <span class="ads-label">AD</span>
+            <img id="ads-display-img" src="" alt="Ads">
+        </div>
+        <div class="ads-progress-container">
+            <div id="ads-progress-fill" class="ads-progress-bar"></div>
+        </div>
+    </div>
 
+    <!-- Hubungkan Konfigurasi Iklan Terpisah -->
+    <script src="ads.js"></script>
+    <script src="config.js"></script>
+    <script src="core.js"></script>
+
+    <!-- LOGIKA PEMUTAR IKLAN (Langsung di HTML) -->
+    <script>
+        let adIndex = 0;
+        const adPlayer = document.getElementById('popup-ads-player');
+        const adImg = document.getElementById('ads-display-img');
+        const adProgress = document.getElementById('ads-progress-fill');
+        
+        function startAdsEngine() {
+            if (typeof adsData === 'undefined' || adsData.list.length === 0) return;
+        
+            const currentAd = adsData.list[adIndex];
+            
+            // 1. Setup Konten
+            adImg.src = currentAd.image;
+            adPlayer.onclick = () => window.location.href = currentAd.link;
+        
+            // 2. Munculkan Iklan
+            adPlayer.classList.add('show-ads');
+        
+            // 3. Jalankan Progress Bar
+            setTimeout(() => {
+                adProgress.style.transition = `width ${adsData.settings.tampilSelama}ms linear`;
+                adProgress.style.width = "100%";
+            }, 100);
+        
+            // 4. Selesai Tampil -> Hilangkan
+            setTimeout(() => {
+                adPlayer.classList.remove('show-ads');
+        
+                // Reset Progress & Ganti Index setelah animasi geser selesai (800ms)
+                setTimeout(() => {
+                    adProgress.style.transition = "none";
+                    adProgress.style.width = "0%";
+                    adIndex = (adIndex + 1) % adsData.list.length;
+                    
+                    // 5. Tunggu Jeda 30 Detik untuk muncul lagi
+                    setTimeout(startAdsEngine, adsData.settings.jedaMuncul);
+                }, 800);
+        
+            }, adsData.settings.tampilSelama);
+        }
+        
+        // Jalankan mesin iklan 3 detik setelah web dibuka
+        window.addEventListener('load', () => {
+            setTimeout(startAdsEngine, 3000);
+        });
+    </script>
 </body>
+
 </html>
