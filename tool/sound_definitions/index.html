@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sound Generator iOS</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Library untuk ZIP & Save -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        /* Penyesuaian agar tombol tidak terlalu raksasa seperti permintaan sebelumnya */
+        .btn-add, .btn-download { width: auto; min-width: 160px; margin: 0 auto 20px auto; border-radius: 12px; }
+        .page-view { display: none; }
+        .page-view.active { display: block; animation: iosFade 0.3s ease; }
+        @keyframes iosFade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .center-wrapper { display: flex; justify-content: center; width: 100%; }
+        .ios-tab { cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- iOS Top Navigation Bar -->
+    <div class="ios-top-bar">
+        <a href="../../index.html" class="ios-back-btn">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Back
+        </a>
+        <div class="ios-nav-title" id="nav-title">Generator</div>
+        <div style="width: 44px;"></div>
+    </div>
+
+    <div class="container">
+        
+        <!-- HALAMAN 1: GENERATOR -->
+        <div id="view-generate" class="page-view active">
+            <h1 class="ios-large-title">Generator</h1>
+            <p class="ios-subtitle">Buat sound_definitions.json dengan mudah.</p>
+
+            <div class="card" style="background: rgba(0,122,255,0.05); border: 1px dashed var(--accent);">
+                <label>Import Data</label>
+                <div class="flex-row">
+                    <button class="btn btn-warning" style="margin-top:0" onclick="document.getElementById('importJson').click()">Import JSON</button>
+                    <button class="btn btn-warning" style="margin-top:0" onclick="document.getElementById('importZip').click()">Import ZIP</button>
+                    <input type="file" id="importJson" accept=".json" style="display:none" onchange="importJson(event)">
+                    <input type="file" id="importZip" accept=".zip" style="display:none" onchange="importZip(event)">
+                </div>
+            </div>
+
+            <div class="card">
+                <label>Format Version</label>
+                <select id="format-version-select"></select>
+            </div>
+
+            <div id="sound-entries-container"></div>
+
+            <div class="center-wrapper">
+                <button class="btn btn-add" onclick="addSoundEntry()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="18" height="18"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Tambah Suara
+                </button>
+            </div>
+        </div>
+
+        <!-- HALAMAN 2: CODE PREVIEW -->
+        <div id="view-code" class="page-view">
+            <h1 class="ios-large-title">Code Preview</h1>
+            <p class="ios-subtitle">Pratinjau struktur file JSON Anda.</p>
+            <div class="card code-card" style="position: relative;">
+                <button class="btn-copy" onclick="copyCode()" id="btn-copy">Copy</button>
+                <pre id="json-preview"></pre>
+            </div>
+        </div>
+
+        <!-- HALAMAN 3: FOLDER PREVIEW -->
+        <div id="view-folder" class="page-view">
+            <h1 class="ios-large-title">Folder View</h1>
+            <p class="ios-subtitle">Struktur direktori di dalam ZIP.</p>
+            <div class="card">
+                <div id="folder-preview-content" style="font-family: monospace; font-size: 14px; line-height: 1.6;"></div>
+            </div>
+            
+            <div class="center-wrapper">
+                <button class="btn btn-download" onclick="downloadZip()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download .ZIP
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- iOS Bottom Navigation Bar -->
+    <div class="ios-bottom-bar">
+        <div class="ios-tab active" onclick="navigate('generate', 'Generator', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M3 20h3M7 4h10M5 8h14M3 12h18M3 16h18"></path></svg>
+            Generate
+        </div>
+        <div class="ios-tab" onclick="navigate('code', 'Code Preview', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            Code
+        </div>
+        <div class="ios-tab" onclick="navigate('folder', 'Folder Preview', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            Folders
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

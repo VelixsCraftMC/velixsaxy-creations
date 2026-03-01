@@ -1,0 +1,375 @@
+:root {
+    /* iOS Light/Dark Adaptive Variables */
+    --bg: #F2F2F7;
+    --card: #FFFFFF;
+    --text: #000000;
+    --text-sec: #8A8A8E;
+    --accent: #007AFF; /* iOS Blue */
+    --danger: #FF3B30; /* iOS Red */
+    --success: #34C759; /* iOS Green */
+    --warning: #FF9500; /* iOS Orange */
+    --border: #C6C6C8;
+    --nav-bg: rgba(249, 249, 249, 0.85);
+    --input-bg: #E5E5EA;
+    --code-bg: #282C34;
+    --code-text: #61AFEF;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #000000;
+        --card: #1C1C1E;
+        --text: #FFFFFF;
+        --text-sec: #EBEBF599;
+        --accent: #0A84FF;
+        --danger: #FF453A;
+        --success: #32D74B;
+        --warning: #FF9F0A;
+        --border: #38383A;
+        --nav-bg: rgba(29, 29, 29, 0.85);
+        --input-bg: #2C2C2E;
+        --code-bg: #151718;
+    }
+}
+
+* { 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent;
+}
+
+body { 
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; 
+    background-color: var(--bg); 
+    color: var(--text); 
+    margin: 0; 
+    padding-top: 50px; 
+    padding-bottom: 110px; /* Space for bottom nav */
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+.container { 
+    width: 100%; 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 16px;
+}
+
+/* Typography iOS */
+.ios-large-title {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-top: 10px;
+}
+.ios-subtitle {
+    font-size: 15px;
+    color: var(--text-sec);
+    margin-top: 5px;
+    margin-bottom: 24px;
+}
+
+/* iOS Top Navigation Bar */
+.ios-top-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 48px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 1000;
+}
+
+.ios-back-btn {
+    display: flex;
+    align-items: center;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 400;
+    gap: 4px;
+}
+.ios-back-btn:active { opacity: 0.5; }
+
+.ios-nav-title {
+    font-size: 17px;
+    font-weight: 600;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* iOS Bottom Navigation Bar */
+.ios-bottom-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 83px; /* standard iPhone height with home bar */
+    background: var(--nav-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    padding-top: 10px;
+    padding-bottom: 25px; /* Safe Area equivalent */
+    z-index: 1000;
+}
+
+.ios-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-sec);
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 500;
+    gap: 4px;
+    transition: 0.2s;
+}
+
+.ios-tab svg { width: 24px; height: 24px; }
+.ios-tab.active { color: var(--accent); }
+
+/* iOS Cards (Form Group) */
+.card { 
+    background: var(--card); 
+    border-radius: 14px; 
+    padding: 16px; 
+    margin-bottom: 20px; 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.code-card { padding: 0; overflow: hidden; }
+
+/* Forms & Inputs */
+.form-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 16px; 
+}
+@media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+label { 
+    display: block; 
+    font-size: 13px; 
+    text-transform: uppercase;
+    color: var(--text-sec); 
+    margin-bottom: 6px; 
+    margin-left: 6px;
+    font-weight: 600; 
+    letter-spacing: -0.1px;
+}
+
+input, select, textarea { 
+    width: 100%; 
+    padding: 12px 14px; 
+    background: var(--input-bg); 
+    border: none; 
+    color: var(--text); 
+    border-radius: 10px; 
+    font-size: 16px; /* 16px avoids auto-zoom on iOS */
+    outline: none; 
+    font-family: inherit;
+    transition: 0.2s;
+}
+input:focus, select:focus {
+    box-shadow: 0 0 0 2px var(--accent);
+}
+
+/* Buttons */
+.btn { 
+    padding: 14px 16px; 
+    border: none; 
+    border-radius: 12px; 
+    cursor: pointer; 
+    font-weight: 600; 
+    font-size: 16px;
+    transition: transform 0.1s, opacity 0.2s; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 8px;
+}
+.btn:active { transform: scale(0.97); opacity: 0.8; }
+
+.btn-add { 
+    background: var(--accent); 
+    color: white; 
+    width: 100%; 
+    margin-bottom: 20px; 
+}
+.btn-add svg { width: 20px; height: 20px; }
+
+.btn-danger { 
+    background: rgba(255, 59, 48, 0.1); 
+    color: var(--danger); 
+}
+.btn-danger-small { 
+    padding: 8px 12px; 
+    font-size: 13px; 
+    border-radius: 8px;
+    margin-left: 8px; 
+}
+.btn-warning { 
+    background: rgba(255, 149, 0, 0.1); 
+    color: var(--warning); 
+    font-size: 13px; 
+    margin-top: 8px; 
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+.btn-download { 
+    background: var(--accent); 
+    color: white; 
+    width: 100%; 
+    font-size: 17px; 
+    padding: 16px; 
+    border-radius: 0 0 14px 14px;
+}
+.btn-download svg { width: 22px; height: 22px; }
+
+/* Info Box (Like iOS Tips) */
+.info-box {  
+    background: rgba(0, 122, 255, 0.1);  
+    border-radius: 14px;  
+    padding: 16px;  
+    margin-bottom: 24px; 
+}  
+.info-title {  
+    color: var(--accent);  
+    font-weight: 600;  
+    font-size: 15px;  
+    margin-bottom: 8px;  
+    display: flex;  
+    align-items: center; 
+    gap: 6px;
+} 
+.info-title svg { width: 18px; height: 18px; }
+.info-content {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+} 
+.info-content ul {
+    margin: 5px 0 0 18px;
+    padding: 0;
+    color: var(--text-sec);
+} 
+.info-content li { margin-bottom: 4px; }
+
+/* iOS Segmented Control (Tabs) */
+.tabs { 
+    display: flex; 
+    background: rgba(118, 118, 128, 0.12);
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 15px;
+} 
+.tab { 
+    flex: 1;
+    text-align: center;
+    padding: 8px 15px; 
+    font-size: 14px; 
+    font-weight: 500;
+    color: var(--text);
+    border: none;
+    background: transparent;
+    border-radius: 8px; 
+    cursor: pointer; 
+    transition: 0.2s;
+} 
+.tab.active { 
+    background: var(--card); 
+    color: var(--text); 
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12), 0 3px 1px rgba(0,0,0,0.04);
+    font-weight: 600;
+}
+
+/* Code Preview */
+pre { 
+    margin: 0;
+    padding: 45px 16px 20px 16px !important; 
+    background: var(--code-bg); 
+    color: var(--code-text); 
+    font-family: 'SF Mono', 'Consolas', monospace; 
+    font-size: 13px; 
+    height: 350px; 
+    overflow: auto; 
+    white-space: pre; 
+    border-radius: 14px 14px 0 0;
+}
+.btn-copy { 
+    position: absolute; 
+    top: 10px; 
+    right: 12px; 
+    background: var(--card); 
+    color: var(--text); 
+    border: 1px solid var(--border);
+    padding: 6px 14px; 
+    border-radius: 20px; 
+    font-size: 12px; 
+    font-weight: 600; 
+    cursor: pointer; 
+    z-index: 10; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: 0.2s; 
+} 
+.btn-copy.success { 
+    background: var(--success); 
+    color: white; 
+    border-color: var(--success);
+}
+
+/* Dynamic Content styling inside commands_ui generated by script.js */
+.param-box { 
+    border-left: 3px solid var(--accent); 
+    padding-left: 14px; 
+    margin: 16px 0; 
+    background: var(--input-bg); 
+    padding-bottom: 12px; 
+    padding-top: 12px;
+    padding-right: 12px;
+    border-radius: 0 10px 10px 0; 
+} 
+.enum-container { 
+    background: var(--bg); 
+    border: 1px solid var(--border); 
+    padding: 14px; 
+    border-radius: 10px; 
+    margin-top: 12px; 
+} 
+.flex-row { 
+    display: flex; 
+    gap: 12px; 
+    align-items: center; 
+    margin-top: 8px; 
+} 
+.flex-row input { flex: 1; }  
+
+.preview-box { 
+    background: rgba(0, 0, 0, 0.05); 
+    border-radius: 10px; 
+    padding: 14px; 
+    margin-bottom: 16px; 
+    border-left: 4px solid var(--success); 
+    font-family: 'SF Mono', 'Consolas', monospace; 
+    word-wrap: break-word; 
+} 
+@media (prefers-color-scheme: dark) {
+    .preview-box { background: rgba(255, 255, 255, 0.05); }
+}
+.mc-cmd { 
+    color: var(--text); 
+    font-size: 14px; 
+    margin-bottom: 6px; 
+    font-weight: 600;
+} 
+.mc-usage { 
+    color: var(--success); 
+    font-size: 13px; 
+}
