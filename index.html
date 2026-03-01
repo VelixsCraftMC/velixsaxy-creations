@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Ezora Studios - @VelixsCraftMCYT</title>
+    
+    <!-- Hubungkan ke CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Ikon Apple (Ionicons) -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+
+    <!-- iOS TOP BAR (GLASSMORPHISM) -->
+    <header class="ios-top-bar">
+        <div class="ios-nav-title">Ezora Studios</div>
+        <div style="font-size: 10px; color: var(--text-sec); position: absolute; right: 16px; font-weight: 500;">
+            @VelixsCraftMCYT
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="container">
+
+        <!-- ==========================================
+             TAB 1: TOOLS (HALAMAN UTAMA)
+             ========================================== -->
+        <section id="tab-tools" class="tab-content active">
+            <h1 class="ios-large-title">Ezora Tools</h1>
+            <p class="ios-subtitle">Kumpulan alat kreativitas & aset</p>
+
+            <!-- Box Informasi -->
+            <div class="info-box">
+                <div class="info-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    Informasi
+                </div>
+                <div class="info-content">
+                    <ul>
+                        <li>Project VelixsCraftMCYT Akan terus di kerjakan</li>
+                        <li>Hal² yang sudah di buat akan di update selalu</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Box Catatan -->
+            <div class="info-box" style="background: rgba(255, 149, 0, 0.1);">
+                <div class="info-title" style="color: var(--warning);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    Catatan
+                </div>
+                <div class="info-content">
+                    <ul>
+                        <li>Lisensi masih berlaku</li>
+                        <li>Dimohon selalu memberikan tag <b>@velixsaxy</b> di setiap video yang menggunakan aset saya</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Banner Halaman Tool -->
+            <div class="banner-area" style="margin: 24px 0;">
+                <img src="banner/bb.webp" 
+                     style="width:100%; border-radius:14px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" alt="Banner Tool">
+            </div>
+
+            <!-- TAB MENU (SEGMENTED CONTROL) -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchSubTab('sub-tool', this)">Tool</button>
+                <button class="tab" onclick="switchSubTab('sub-post', this)">Post</button>
+                <button class="tab" onclick="switchSubTab('sub-download', this)">Download</button>
+            </div>
+
+            <!-- Konten Sub-Tab: Tool -->
+            <div id="sub-tool" class="sub-tab-content">
+                <div id="list-tool-container">
+                    <!-- JS akan merender list tool di sini -->
+                </div>
+            </div>
+
+            <!-- Konten Sub-Tab: Post -->
+            <div id="sub-post" class="sub-tab-content" style="display:none;">
+                <div id="list-post-container">
+                    <!-- JS akan merender list post di sini -->
+                </div>
+            </div>
+
+            <!-- Konten Sub-Tab: Download -->
+            <div id="sub-download" class="sub-tab-content" style="display:none;">
+                <div id="list-download-container">
+                    <!-- JS akan merender list download di sini -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECTION: CREATOR (PROFIL) -->
+<section id="tab-creator" class="tab-content" style="display:none;">
+    <h1 class="ios-large-title">Creator</h1>
+    <p class="ios-subtitle">Mengenal pengembangan Project Oleh @VelixsCraftMCYT</p>
+
+    <!-- TULISAN BERJALAN (MARQUEE) -->
+    <div class="ios-marquee-wrapper">
+        <div class="marquee-content" id="marquee-text">
+            Halo selamat datang di Ezora Studios, disini adalah tempat project ada
+        </div>
+    </div>
+
+    <div class="card" style="padding: 0; overflow: hidden; border: 0.5px solid var(--border);">
+        <!-- Banner Profil -->
+        <img id="creator-banner" src="" style="width:100%; height:140px; object-fit:cover;" alt="Banner">
+        <!-- ... sisa kode profil ... -->
+                
+                <div style="padding: 16px; text-align: center; margin-top: -55px;">
+                    <!-- Profile Wrapper (Foto + Dekorasi melayang) -->
+                    <div class="profile-wrapper" style="position: relative; display: inline-block;">
+                        <img id="creator-profile" src="" 
+                             style="width:85px; height:85px; border-radius:50%; border: 4px solid var(--card); background: var(--card); position: relative; z-index: 1;" 
+                             alt="Profile Pic">
+                        
+                        <!-- Decoration Profile (Discord Style) -->
+                        <img id="creator-decoration" src="" 
+                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 125px; height: 125px; z-index: 2; pointer-events: none;" 
+                             alt="Profile Decoration">
+                    </div>
+                    
+                    <h3 id="creator-name" style="margin: 12px 0 4px 0; font-size: 22px; font-weight: 700;"></h3>
+                    <p id="creator-bio" class="pre-line" style="font-size: 14px; color: var(--text-sec); line-height: 1.5; margin-bottom: 20px;"></p>
+                    
+                    <!-- Tombol Sosial -->
+                    <div id="creator-socials" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <!-- Tombol Youtube, WA, Discord di sini -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Konten tambahan di bawah profil -->
+            <div id="creator-extra-content" style="margin-top: 20px;"></div>
+        </section>
+
+
+        <!-- ==========================================
+             TAB 3: CHANGELOGS (UPDATE)
+             ========================================== -->
+        <section id="tab-changelogs" class="tab-content" style="display:none;">
+            <h1 class="ios-large-title">Updates</h1>
+            <p class="ios-subtitle">Riwayat pembaruan Projects - Ezora Studios</p>
+            
+            <div id="changelogs-container">
+                <!-- JS akan merender list changelogs di sini -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- iOS BOTTOM BAR (NAVIGATION) -->
+    <nav class="ios-bottom-bar">
+        <a href="javascript:void(0)" class="ios-tab active" onclick="switchTab('tab-tools', this)">
+            <ion-icon name="apps-outline"></ion-icon>
+            <span>Tools</span>
+        </a>
+        <a href="javascript:void(0)" class="ios-tab" onclick="switchTab('tab-creator', this)">
+            <ion-icon name="person-circle-outline"></ion-icon>
+            <span>Creator</span>
+        </a>
+        <a href="javascript:void(0)" class="ios-tab" onclick="switchTab('tab-changelogs', this)">
+            <ion-icon name="time-outline"></ion-icon>
+            <span>Updates</span>
+        </a>
+    </nav>
+
+    <!-- Hubungkan ke JS -->
+    <script src="konfigurasi_tool.js"></script>
+
+</body>
+</html>
