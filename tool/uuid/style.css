@@ -373,7 +373,6 @@ pre {
     color: var(--success); 
     font-size: 13px; 
 }
-
 /* Animasi Muncul */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
