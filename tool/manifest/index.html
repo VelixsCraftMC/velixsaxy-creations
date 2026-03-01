@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MC Manifest Generator Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+
+    <div class="ios-top-bar">
+        <a href="../../index.html" class="ios-back-btn">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            <span>Back</span>
+        </a>
+        <div class="ios-nav-title">Manifest Gen</div>
+        <div style="width: 60px;"></div>
+    </div>
+
+    <div class="container">
+        <div id="tab-edit-content" class="tab-page active">
+            <h1 class="ios-large-title">Generator</h1>
+
+            <!-- BOX CATATAN & INFORMASI -->
+            <div class="ios-info-box">
+                <div class="info-section">
+                    <div class="info-header note-color">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 00 2 2h14a2 2 0 00 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        Catatan:
+                    </div>
+                    <p>» pastikan kamu mendownload filenya atau melakukan copy code</p>
+                </div>
+                <div class="info-divider"></div>
+                <div class="info-section">
+                    <div class="info-header info-color">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        Informasi:
+                    </div>
+                    <p>» global version pack itu versi addons</p>
+                    <p>» bisa subspack pastikan kamu melakukannya dengan benar</p>
+                </div>
+            </div>
+
+            <div class="form-group-title">Pack Selection</div>
+            <div class="card">
+                <div class="form-row">
+                    <label>Enable Behavior Pack (BP)</label>
+                    <input type="checkbox" id="enableBP" checked onchange="toggleSections()">
+                </div>
+                <div class="form-row">
+                    <label>Enable Resource Pack (RP)</label>
+                    <input type="checkbox" id="enableRP" checked onchange="toggleSections()">
+                </div>
+                <div class="form-row" id="link-row">
+                    <label style="color: var(--accent); font-weight: 600;">BP & RP saling membutuhkan</label>
+                    <input type="checkbox" id="linkPacks" onchange="updateLive()">
+                </div>
+            </div>
+
+            <!-- BEHAVIOR PACK EDITOR -->
+            <div id="bp-editor">
+                <div class="form-group-title">Behavior Pack Details</div>
+                <div class="card">
+                    <div class="form-row">
+                        <label>Pack Name</label>
+                        <input type="text" id="bpName" value="My Addon BP" oninput="updateLive()">
+                    </div>
+                    <div class="form-row-vertical">
+                        <label>Description</label>
+                        <textarea id="bpDesc" oninput="updateLive()">Logic description</textarea>
+                    </div>
+                    <div class="form-row">
+                        <label>Global Version</label>
+                        <input type="text" id="bpVer" value="1.0.0" oninput="updateLive()">
+                    </div>
+                    <div class="form-row">
+                        <label>Min Engine</label>
+                        <input type="text" id="bpEngine" value="1.13.0" oninput="updateLive()">
+                    </div>
+                </div>
+
+                <div class="form-group-title">BP Scripting Modules</div>
+                <div class="card">
+                    <div class="form-row">
+                        <label>Enable Scripting</label>
+                        <input type="checkbox" id="bpScript" onchange="toggleSections()">
+                    </div>
+                    <div id="script-options" style="display:none">
+                        <div class="form-row">
+                            <label>Entry (main.js)</label>
+                            <input type="text" id="bpScriptPath" value="scripts/main.js" oninput="updateLive()">
+                        </div>
+                        <div class="module-group">
+                            <div class="form-row">
+                                <label>@minecraft/server</label>
+                                <input type="checkbox" id="modServer" onchange="updateLive()">
+                            </div>
+                            <input type="text" id="verServer" class="mod-ver" value="1.10.0-beta" oninput="updateLive()">
+                        </div>
+                        <div class="module-group">
+                            <div class="form-row">
+                                <label>@minecraft/server-ui</label>
+                                <input type="checkbox" id="modUI" onchange="updateLive()">
+                            </div>
+                            <input type="text" id="verUI" class="mod-ver" value="1.2.0" oninput="updateLive()">
+                        </div>
+                        <div class="module-group">
+                            <div class="form-row">
+                                <label>@minecraft/server-common</label>
+                                <input type="checkbox" id="modCommon" onchange="updateLive()">
+                            </div>
+                            <input type="text" id="verCommon" class="mod-ver" value="1.0.0" oninput="updateLive()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group-title">BP Subpacks</div>
+                <div id="bp-subpacks-container"></div>
+                <button class="btn-secondary" onclick="addSubpack('bp')">+ Add BP Subpack</button>
+            </div>
+
+            <!-- RESOURCE PACK EDITOR -->
+            <div id="rp-editor">
+                <div class="form-group-title">Resource Pack Details</div>
+                <div class="card">
+                    <div class="form-row">
+                        <label>Pack Name</label>
+                        <input type="text" id="rpName" value="My Addon RP" oninput="updateLive()">
+                    </div>
+                    <div class="form-row-vertical">
+                        <label>Description</label>
+                        <textarea id="rpDesc" oninput="updateLive()">Textures description</textarea>
+                    </div>
+                    <div class="form-row">
+                        <label>Global Version</label>
+                        <input type="text" id="rpVer" value="1.0.0" oninput="updateLive()">
+                    </div>
+                    <div class="form-row">
+                        <label>Min Engine</label>
+                        <input type="text" id="rpEngine" value="1.13.0" oninput="updateLive()">
+                    </div>
+                </div>
+                <div class="form-group-title">RP Subpacks</div>
+                <div id="rp-subpacks-container"></div>
+                <button class="btn-secondary" onclick="addSubpack('rp')">+ Add RP Subpack</button>
+            </div>
+
+            <div class="form-group-title">Pack Icon</div>
+            <div class="card">
+                <div class="form-row">
+                    <label>pack_icon.png</label>
+                    <input type="file" id="packIcon" accept="image/png" style="width: auto;">
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: PREVIEW -->
+        <div id="tab-preview-content" class="tab-page">
+            <div id="bp-preview-area">
+                <div class="preview-header">
+                    <span class="preview-title">BP MANIFEST</span>
+                    <button class="btn-copy" onclick="copyCode('bpCode')">Copy</button>
+                </div>
+                <div class="code-wrapper"><pre id="bpCode"></pre></div>
+            </div>
+            <div id="rp-preview-area" style="margin-top:20px">
+                <div class="preview-header">
+                    <span class="preview-title">RP MANIFEST</span>
+                    <button class="btn-copy" onclick="copyCode('rpCode')">Copy</button>
+                </div>
+                <div class="code-wrapper"><pre id="rpCode"></pre></div>
+            </div>
+        </div>
+
+        <!-- TAB: EXPORT -->
+        <div id="tab-download-content" class="tab-page">
+            <div class="form-group-title">Export Pack (.mcpack)</div>
+            <button class="btn-download" id="dl-bp-btn" onclick="downloadPack('bp')">Download Behavior Pack</button>
+            <button class="btn-download" id="dl-rp-btn" style="background:var(--success)" onclick="downloadPack('rp')">Download Resource Pack</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="ios-bottom-bar">
+        <a href="#" class="ios-tab active" onclick="switchTab(event, 'edit')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 00 2 2h14a2 2 0 00 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <span>Edit</span>
+        </a>
+        <a href="#" class="ios-tab" onclick="switchTab(event, 'preview')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <span>Preview</span>
+        </a>
+        <a href="#" class="ios-tab" onclick="switchTab(event, 'download')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            <span>Export</span>
+        </a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
