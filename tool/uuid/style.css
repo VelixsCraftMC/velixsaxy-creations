@@ -373,3 +373,23 @@ pre {
     color: var(--success); 
     font-size: 13px; 
 }
+
+/* Animasi Muncul */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Penyesuaian pre agar tidak terlalu tinggi jika hanya satu baris */
+.code-card pre {
+    height: auto !important;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+/* Pastikan tombol salin berada di posisi yang benar */
+.btn-copy {
+    top: 8px !important;
+    right: 8px !important;
+}
