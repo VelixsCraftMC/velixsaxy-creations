@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Ultimate MCPE Command BP Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+
+<!-- Top Navigation Bar iOS Style -->
+<div class="ios-top-bar">
+    <!-- Tombol Back ke HTML lain (ubah href sesuai kebutuhan) -->
+    <a href="../../index.html" class="ios-back-btn">
+        <svg width="14" height="24" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.5 1.5L2 10L10.5 18.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Back</span>
+    </a>
+    <div class="ios-nav-title">Generator</div>
+    <div style="width: 70px;"></div> <!-- Spacer -->
+</div>
+
+<div class="container" id="section-setup">
+    <div class="ios-large-title">BP Generator</div>
+    <p class="ios-subtitle">By @VelixsCraftMCYT | Lowercase & Underscore Auto-Formatter</p>
+
+    <!-- Box Informasi / Catatan -->
+    <div class="info-box">
+        <div class="info-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            Informasi & Catatan
+        </div>
+        <div class="info-content">
+            <p><strong>Mendukung Minecraft versi:</strong></p>
+            <ul>
+                <li>Koding custom commands mendukung versi terbaru (1.21.130 dan 1.26.2+)</li>
+                <li>Diharapkan selalu mengaktifkan <b>Beta API</b> pada experimental world.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="form-grid">
+            <div>
+                <label>Pack Name</label>
+                <input type="text" id="pack_name" value="Custom Command BP" oninput="liveUpdateAll()">
+            </div>
+            <div>
+                <label>Global Namespace (auto-format)</label>
+                <input type="text" id="global_ns" value="namespace" 
+                       oninput="this.value = this.value.toLowerCase().replace(/\s+/g, '_'); liveUpdateAll()">
+            </div>
+        </div>
+    </div>
+
+    <!-- Commands Anchor -->
+    <div id="section-commands" style="padding-top: 10px;"></div>
+    
+    <div id="commands_ui"></div>
+    
+    <button class="btn btn-add" onclick="addNewCommand()">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+        Add New Command
+    </button>
+
+    <!-- Export Anchor -->
+    <div id="section-export" style="margin-top: 30px;">
+        <div class="tabs">
+            <button class="tab active" id="tab-js" onclick="switchTab('js')">CustomCommands.js</button>
+            <button class="tab" id="tab-manifest" onclick="switchTab('manifest')">manifest.json</button>
+        </div>
+        
+        <div class="card code-card" style="border-radius: 0 0 14px 14px; position: relative; margin-bottom: 30px;">
+            <button class="btn-copy" id="copy_btn" onclick="copyToClipboard()">Copy</button>
+            <pre id="code_preview"></pre>
+            <button class="btn btn-download" onclick="generateZip()">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>
+                Download .mcpack
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation Bottom App Style -->
+<div class="ios-bottom-bar">
+    <a href="#section-setup" class="ios-tab active" onclick="setActiveTab(this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        <span>Setup</span>
+    </a>
+    <a href="#section-commands" class="ios-tab" onclick="setActiveTab(this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+        <span>Commands</span>
+    </a>
+    <a href="#section-export" class="ios-tab" onclick="setActiveTab(this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"></path></svg>
+        <span>Export</span>
+    </a>
+</div>
+
+<script>
+    // Skrip mini untuk mengontrol style active tab bar bawah saat ditekan
+    function setActiveTab(element) {
+        document.querySelectorAll('.ios-tab').forEach(tab => tab.classList.remove('active'));
+        element.classList.add('active');
+    }
+</script>
+<!-- Memanggil Skrip Asli -->
+<script src="script.js"></script>
+</body>
+</html>
