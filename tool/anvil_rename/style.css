@@ -525,9 +525,18 @@ pre {
     border-radius: 14px 14px 0 0;
 }
 
+/* Pastikan ini ada di style.css anda */
+.code-card {
+    padding: 0;
+    overflow: hidden;
+    position: relative; /* TAMBAHKAN INI */
+    border-radius: 14px;
+    background: var(--code-bg);
+}
+
 .btn-copy {
     position: absolute;
-    top: 10px;
+    top: 12px;
     right: 12px;
     background: var(--card);
     color: var(--text);
@@ -537,7 +546,7 @@ pre {
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
-    z-index: 10;
+    z-index: 100; /* Pastikan di atas elemen lain */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: 0.2s;
 }
