@@ -13,15 +13,15 @@ const bannerConfig = [
 // path_zip: Jalur folder & nama file yang akan diciptakan di dalam .zip
 const assetConfig = [
     {
-        path: "manifest.json",
+        path: "file/manifest.json",
         path_zip: "manifest.json"
     },
     {
-        path: "pack_icon.png",
+        path: "file/pack_icon.png",
         path_zip: "pack_icon.png"
     },
     {
-        path: "velixsaxy",
+        path: "file/velixsaxy.js",
         path_zip: "scripts/class/velixsaxy"
     }
 ];
