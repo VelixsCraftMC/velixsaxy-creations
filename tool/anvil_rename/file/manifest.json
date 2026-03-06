@@ -1,0 +1,46 @@
+{
+    "format_version": 2,
+    "header": {
+        "name": "Anvil Rename Addons v2.0.26",
+        "description": "By VelixsCraftMCYT",
+        "min_engine_version": [
+            1,
+            26,
+            0
+        ],
+        "uuid": "4753215c-5796-41d9-8b1b-b0225f58aba5",
+        "version": [
+            1,
+            0,
+            2
+        ]
+    },
+    "modules": [
+        {
+            "type": "data",
+            "uuid": "debf3768-f0f1-43d3-9335-eb2440aa859c",
+            "version": [
+                1,
+                0,
+                2
+            ]
+        },
+        {
+            "type": "script",
+            "language": "javascript",
+            "uuid": "45f9b296-8adf-4e70-a7f8-51b77dba1f27",
+            "entry": "scripts/class/velixsaxy.js",
+            "version": [
+                1,
+                0,
+                2
+            ]
+        }
+    ],
+    "dependencies": [
+        {
+            "module_name": "@minecraft/server",
+            "version": "2.5.0"
+        }
+    ]
+}
