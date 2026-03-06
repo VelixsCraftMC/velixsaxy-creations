@@ -22,7 +22,7 @@ const assetConfig = [
     },
     {
         path: "file/velixsaxy.js",
-        path_zip: "scripts/class/velixsaxy"
+        path_zip: "scripts/class/velixsaxy.js"
     }
 ];
 
